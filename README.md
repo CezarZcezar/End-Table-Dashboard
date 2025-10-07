@@ -16,7 +16,7 @@ An End Table Dashboard based on ESP32 with 2.4" display, with 3D printed enclous
 - 2 M2x3 mm socket screw
 % ## Schematic
 ## Breadboard Connections
-![image](https://github.com/CezarZcezar/End-Table-Dashboard/blob/master/Images/Connection_Schematic.pdf)
+![image](https://github.com/CezarZcezar/End-Table-Dashboard/blob/master/Images/Connection_Schematic.png)
 ## Enclosure
 ![image](https://github.com/CezarZcezar/End-Table-Dashboard/blob/master/Images/Enclosure.png)
 ## Final assembly
