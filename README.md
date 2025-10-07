@@ -15,8 +15,8 @@ An End Table Dashboard based on ESP32 with 2.4" display, with 3D printed enclous
 - [Some male-to-female Dupont wires](https://aliexpress.com/item/1005004647016228.html?spm=a2g0o.productlist.main.1.35da75aezGxPwd&algo_pvid=1d4d3d77-f353-4106-b48c-f8fa18bc3b45&algo_exp_id=1d4d3d77-f353-4106-b48c-f8fa18bc3b45-0&pdp_ext_f=%7B%22order%22%3A%223401%22%2C%22eval%22%3A%221%22%7D&pdp_npi=6%40dis%21PLN%215.10%215.10%21%21%211.37%211.37%21%40211b61a417573403873468752ea79d%2112000029976597959%21sea%21PL%211907567941%21X%211%210%21n_tag%3A-29919%3Bd%3A40205d64%3Bm03_new_user%3A-29895&curPageLogUid=R1JLSPnn1TRy&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005004647016228%7C_p_origin_prod%3A) and [some U-shape breadboard wires](https://aliexpress.com/item/1005007175633091.html?spm=a2g0o.productlist.main.2.5a133f29EzGdDS&algo_pvid=81da215d-6534-4948-ae53-f2407d790a36&algo_exp_id=81da215d-6534-4948-ae53-f2407d790a36-1&pdp_ext_f=%7B%22order%22%3A%221924%22%2C%22eval%22%3A%221%22%7D&pdp_npi=6%40dis%21PLN%218.79%218.36%21%21%2116.83%2116.01%21%402103856417573405229388185e75ff%2112000039704758641%21sea%21PL%211907567941%21X%211%210%21n_tag%3A-29919%3Bd%3A40205d64%3Bm03_new_user%3A-29895%3BpisId%3A5000000184800685&curPageLogUid=h0BLbpH93uzy&utparam-url=scene%3Asearch%7Cquery_from%3A%7Cx_object_id%3A1005007175633091%7C_p_origin_prod%3A)
 - 2 M2x3 mm socket screw
 % ## Schematic
-## Breadboard Connections/Prototype
-![image](https://github.com/CezarZcezar/End-Table-Dashboard/blob/master/Connection_Schematic.png)
+## Breadboard Connections
+![image](https://github.com/CezarZcezar/End-Table-Dashboard/blob/master/Images/Connection_Schematic.pdf)
 ## Enclosure
 ![image](https://github.com/CezarZcezar/End-Table-Dashboard/blob/master/Images/Enclosure.png)
 ## Final assembly
