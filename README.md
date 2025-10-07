@@ -16,13 +16,13 @@ An End Table Dashboard based on ESP32 with 2.4" display, with 3D printed enclous
 - 2 M2x3 mm socket screw
 % ## Schematic
 ## Breadboard Connections/Prototype
-![image](https://github.com/CezarZcezar/Bed_End_Table_Dashboard/blob/master/Connection_Schematic.png)
+![image](https://github.com/CezarZcezar/End-Table-Dashboard/blob/master/Connection_Schematic.png)
 ## Enclosure
-![image](https://github.com/CezarZcezar/Bed_End_Table_Dashboard/blob/master/Images/Enclosure.png)
+![image](https://github.com/CezarZcezar/End-Table-Dashboard/blob/master/Images/Enclosure.png)
 ## Final assembly
-![image](https://github.com/CezarZcezar/Bed_End_Table_Dashboard/blob/master/Images/Assembled_View_1.JPEG)
-![image](https://github.com/CezarZcezar/Bed_End_Table_Dashboard/blob/master/Images/Assembled_View_2.JPEG)
-![image](https://github.com/CezarZcezar/Bed_End_Table_Dashboard/blob/master/Images/Inside_View_1.JPEG)
+![image](https://github.com/CezarZcezar/End-Table-Dashboard/blob/master/Images/Assembled_View_1.JPEG)
+![image](https://github.com/CezarZcezar/End-Table-Dashboard/blob/master/Images/Assembled_View_2.JPEG)
+![image](https://github.com/CezarZcezar/End-Table-Dashboard/blob/master/Images/Inside_View_1.JPEG)
 ## Software
 ## Future
 - Add air quality sensors
