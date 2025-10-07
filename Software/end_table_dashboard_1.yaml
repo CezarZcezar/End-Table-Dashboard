@@ -1,0 +1,469 @@
+esphome:
+  name: "end_table_dashboard_1" #CHANGEME (optional)
+  friendly_name: "End Table Dashboard 1" #CHANGEME (optional)
+
+esp32:
+  board: esp32dev
+  framework:
+    type: esp-idf
+
+logger:
+
+api:
+  encryption:
+    key: "apikey" #CHANGEME
+
+ota:
+  - platform: esphome
+    password: "password" #CHANGEME
+
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  fast_connect: true
+
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "ESP Fallback Hotspot"
+    password: "password" #CHANGEME
+
+captive_portal:
+
+web_server:
+  port: 80
+
+time:
+  - platform: homeassistant
+    id: ntp
+    on_time:
+      - seconds: 0
+        then:
+          - component.update: display1
+
+i2c:
+  sda: GPIO21
+  scl: GPIO22
+  scan: true
+  id: bus_b
+
+binary_sensor:
+  - platform: gpio
+    pin:
+      number: GPIO1
+      mode: INPUT_PULLUP
+      inverted: true
+    name: "Button Sensor"
+    filters:
+      - delayed_on: 10ms
+
+sensor:
+  - platform: sht4x
+    temperature:
+      name: "Room Temperature"
+      id: sensor_temperature
+    humidity:
+      name: "Room Humidity"
+      id: sensor_humidity
+    update_interval: 60s
+
+  - platform: wifi_signal
+    name: "WiFi Signal Sensor"
+    update_interval: 60s
+
+  - platform: uptime
+    name: "Uptime Sensor"
+
+  - platform: homeassistant
+    entity_id: sensor.openweathermap_feels_like_temperature # RealFeel Temperature from OpenWeatherMap
+    id: feel_temp
+    internal: true
+
+  - platform: homeassistant
+    entity_id: sensor.openweathermap_rain # Rain Precipitation from OpenWeatherMap
+    id: precipitation
+    internal: true
+
+  - platform: homeassistant
+    entity_id: sensor.openweathermap_pressure # Pressure from OpenWeatherMap
+    id: fc_pressure
+    internal: True
+
+  - platform: homeassistant
+    entity_id: sensor.openweathermap_humidity # Humidity from OpenWeatherMap
+    id: fc_humidity
+    internal: True
+
+text_sensor:
+  # More (Text Based) Weather Sensors
+  - platform: homeassistant
+    entity_id: sensor.openweathermap_precipitation_kind # Precipitation kind from OpenWeatherMap
+    id: fc_prec
+    internal: true
+
+  - platform: homeassistant
+    entity_id: sensor.openweathermap_condition # Weather condition from OpenWeatherMap 
+    id: fc_weather
+    internal: true
+  
+  - platform: homeassistant
+    entity_id: sun.sun
+    attribute: next_rising # Home Assistant sun rising entity 
+    id: sun_up
+    internal: true
+
+  - platform: homeassistant
+    entity_id: sun.sun
+    attribute: next_setting # Home Assistant sun setting entity 
+    id: sun_down
+    internal: true
+
+  - platform: homeassistant
+    entity_id: sensor.moon_phase
+    id: moon
+    internal: true
+
+#Defining fonts for display
+font:
+  - file: "fonts/GoogleSans-Medium.ttf"
+    id: font_date
+    size: 24 # set the same as in lambda function of display
+
+  - file: "fonts/GoogleSans-Bold.ttf"
+    id: font_time
+    size: 80 # set the same as in lambda function of display
+
+  - file: "fonts/GoogleSans-Bold.ttf"
+    id: font_value
+    size: 20 # set the same as in lambda function of display
+
+  - file: "fonts/GoogleSans-Bold.ttf"
+    id: font_value_small
+    size: 16 # set the same as in lambda function of display
+
+  # Icons SMALL: Temperature, CO2, umbrella, hail, lightning, lightning-rainy,
+  # rainy, snowy, clear-night, sunny, wind, humidity, air filter, trending down,
+  # trending neutral, trending up, water drop, sunset up, sunset down, gauge (pressure),
+  # new moon, waxing crescent, first quarter, waxing gibbous, full moon, waning gibbous,
+  # last quarter waning crescent
+  - file: "fonts/materialdesignicons-webfont.ttf"
+    id: font_icons_small
+    size: 20 # set the same as in lambda function of display
+    glyphs: [
+      "\U000F050F",
+      "\U000F07E4",
+      "\U000F054B",
+      "\U000F0592",
+      "\U000F0593",
+      "\U000F067E",
+      "\U000F0597",
+      "\U000F0F36",
+      "\U000F0594",
+      "\U000F0599",
+      "\U000F059D",
+      "\U000F058E",
+      "\U000F0D43",
+      "\U000F0533",
+      "\U000F0534",
+      "\U000F0535",
+      "\U000F058C",
+      "\U000F059C",
+      "\U000F059B",
+      "\U000F029A",
+      "\U000F0F64",
+      "\U000F0F67",
+      "\U000F0F61",
+      "\U000F0F68",
+      "\U000F0F62",
+      "\U000F0F66",
+      "\U000F0F63",
+      "\U000F0F65"
+    ]
+
+  # Icons BIG: clear-night, cloudy, partlycloudy, fog, hail, lightning,
+  # lightning-rainy, pouring, rainy, snowy, snowy-rainy, sunny, windy,
+  # windy-variant, exceptional, new moon, waxing crescent, first quarter,
+  # waxing gibbous, full moon, waning gibbous, last quarter waning crescent
+  - file: "fonts/materialdesignicons-webfont.ttf"
+    id: font_icons
+    size: 60 # set the same as in lambda function of display
+    glyphs: [
+      "\U000F0594",
+      "\U000F0590",
+      "\U000F0595",
+      "\U000F0591",
+      "\U000F0592",
+      "\U000F0593",
+      "\U000F067E",
+      "\U000F0596",
+      "\U000F0597",
+      "\U000F0F36",
+      "\U000F067F",
+      "\U000F0599",
+      "\U000F059D",
+      "\U000F059E",
+      "\U000F0F38",
+      "\U000F0F64",
+      "\U000F0F67",
+      "\U000F0F61",
+      "\U000F0F68",
+      "\U000F0F62",
+      "\U000F0F66",
+      "\U000F0F63",
+      "\U000F0F65"
+    ]
+
+spi:
+  id: bus_a
+  clk_pin: GPIO18
+  mosi_pin: GPIO23
+  # miso_pin: GPIO19 # commented because of data rate
+
+output:
+  - platform: ledc
+    pin: GPIO15
+    id: backlight_pwm
+
+light:
+  - platform: monochromatic
+    output: backlight_pwm
+    name: "Display Backlight"
+    id: back_light
+    restore_mode: ALWAYS_ON
+
+display:
+  - platform: ili9xxx
+    spi_id: bus_a
+    model: TFT_2.4
+    reset_pin: GPIO2
+    cs_pin: GPIO16
+    dc_pin: GPIO4
+    id: display1
+    rotation: 90
+    invert_colors: false
+    auto_clear_enabled: true
+    color_palette: 8BIT
+    dimensions:
+      height: 320
+      width: 240
+    update_interval: 1s
+    lambda: |- # lambda function for making the screen work
+      // Defining screen resolution
+      #define xres 320
+      #define yres 240
+
+      // Defining font sizes for easier text placement (remember to set the same as above in yaml font section  
+      #define size_font_date 24
+      #define size_font_time 80
+      #define size_font_value 20
+      #define size_font_value_small 16
+      #define size_font_icons 60
+      #define size_font_icons_small 20 
+
+      auto time_now = id(ntp).now();
+
+      // Getting information about date to different variables
+      int day = time_now.day_of_month;
+      std::string month = time_now.strftime("%b");
+      int year = time_now.year;
+      std::string day_of_week = time_now.strftime("%a");
+
+      // Defining the suffix for an ordinal number
+      std::string suffix = "th";
+      if (day % 10 == 1 && day % 100 != 11) suffix = "st";
+      else if (day % 10 == 2 && day % 100 != 12) suffix = "nd";
+      else if (day % 10 == 3 && day % 100 != 13) suffix = "rd";
+
+      // Date formatting
+      char date_str[50];
+      sprintf(date_str, "%s, %d%s %s, %d", day_of_week.c_str(), day, suffix.c_str(), month.c_str(), year);
+
+      // Date & Time
+      it.print(xres/2, 0, id(font_date), TextAlign::TOP_CENTER, date_str);
+      it.strftime(xres/2, size_font_date-12, id(font_time), TextAlign::TOP_CENTER,"%H:%M:%S", id(ntp).now());
+
+      // Text label
+      it.print(0, size_font_date+2+size_font_time-12, id(font_date), TextAlign::TOP_LEFT, "Indoors:");
+
+      // Indoor Temperature
+      it.printf(0, size_font_date+2+size_font_time+2+size_font_date+2-12, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F050F"); // temperature icon
+      it.printf(20, size_font_date+2+size_font_time+2+size_font_date-12, id(font_value), TextAlign::TOP_LEFT, "%.1f°C", id(sensor_temperature).state); // temperature value
+
+      // Indoor Humidity
+      it.printf(0, size_font_date+2+size_font_time+2+size_font_date+2+size_font_icons_small+2-12, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F058E"); // humidity icon
+      it.printf(20, size_font_date+2+size_font_time+2+size_font_date+2+size_font_value-12, id(font_value), TextAlign::TOP_LEFT, "%.1f%%", id(sensor_humidity).state); //humidity vaule
+
+      // Sun Info
+      // Sunset up
+      
+      it.printf(0, size_font_date+2+size_font_time+2+size_font_date+2+size_font_icons_small+2+size_font_icons_small+2-12, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F059C"); // sunset up icon
+      if (id(sun_up).state.length() >= 16) {
+        std::string down_str = id(sun_up).state.substr(11, 5);  // "04:16"
+        // usuń wiodące zero, jeśli jest
+        if (down_str[0] == '0') {
+          down_str = down_str.substr(1);  // "4:16"
+        }
+        it.printf(20, size_font_date + 2 + size_font_time + 2 + size_font_date + 2 + size_font_icons_small + 2 + size_font_icons_small + 2-12,
+                  id(font_value), TextAlign::TOP_LEFT, "%s", down_str.c_str());
+      }
+
+      // Sunset down
+      it.printf(0, size_font_date+2+size_font_time+2+size_font_date+2+size_font_icons_small+2+size_font_icons_small+2+size_font_icons_small+2-12, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F059B"); // sunset down icon
+      if (id(sun_down).state.length() >= 16) {
+        std::string down_str = id(sun_down).state.substr(11, 5);  // "04:16"
+        // usuń wiodące zero, jeśli jest
+        if (down_str[0] == '0') {
+          down_str = down_str.substr(1);  // "4:16"
+        }
+        it.printf(20, size_font_date + 2 + size_font_time + 2 + size_font_date + size_font_icons_small + 2 + size_font_icons_small + 2+size_font_icons_small+2-12,
+                  id(font_value), TextAlign::TOP_LEFT, "%s", down_str.c_str());
+      }
+
+      // Text label
+      it.print(175, size_font_date+2+size_font_time-12, id(font_date), TextAlign::TOP_LEFT, "Outdoors:");
+
+      // Feel Like Temperature
+      it.printf(175, size_font_date+2+size_font_time+2+size_font_date+2-12, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F050F"); // temperature
+      it.printf(197, size_font_date+2+size_font_time+2+size_font_date-12, id(font_value), TextAlign::TOP_LEFT, "%.1f°C", id(feel_temp).state);
+
+      // Outdoor Humidity
+      it.printf(175, size_font_date+2+size_font_time+2+size_font_date+2+size_font_icons_small+2-12, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F058E"); // humidity icon
+      it.printf(197, size_font_date+2+size_font_time+2+size_font_date+2+size_font_value-12, id(font_value), TextAlign::TOP_LEFT, "%.1f%%", id(fc_humidity).state); //humidity vaule
+
+      // Precipitation
+      #define prec_icon_x 175
+      #define prec_icon_y size_font_date+2+size_font_time+2+size_font_date+2+size_font_icons_small+2+size_font_icons_small+2-12
+      
+      if (id(fc_prec).state == "None") {
+        it.printf(prec_icon_x, prec_icon_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F054B");
+      }
+      if (id(fc_prec).state == "Hail") {
+        it.printf(prec_icon_x, prec_icon_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F0592");
+      }
+      if (id(fc_prec).state == "Rain") {
+        it.printf(prec_icon_x, prec_icon_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F0597");
+      }
+      if (id(fc_prec).state == "Snow") {
+        it.printf(prec_icon_x, prec_icon_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F0F36");
+      }
+
+      it.printf(197, size_font_date+2+size_font_time+2+size_font_date+2+size_font_value+2+size_font_value+2-12, id(font_value), TextAlign::TOP_LEFT, "%.2f mm/h", id(precipitation).state);
+
+      // Pressure
+      it.printf(175, size_font_date+2+size_font_time+2+size_font_date+2+size_font_icons_small+2+size_font_icons_small+2+size_font_icons_small+2-12, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F029A"); // pressure icon
+      it.printf(197, size_font_date+2+size_font_time+2+size_font_date+size_font_value+2+size_font_icons_small+2+size_font_icons_small+2-12, id(font_value), TextAlign::TOP_LEFT, "%.0f hpa", id(fc_pressure).state); // pressure value
+
+      // Weather Icon (middle of the screen)
+      #define weather_icon_x 138
+      #define weather_icon_y size_font_date+2+size_font_time-12
+
+      if (id(fc_weather).state == "clear-night") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0594");
+      }
+      if (id(fc_weather).state == "cloudy") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0590");
+      }
+      if (id(fc_weather).state == "partlycloudy") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0595");
+      }
+      if (id(fc_weather).state == "fog") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0591");
+      }
+      if (id(fc_weather).state == "hail") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0592");
+      }
+      if (id(fc_weather).state == "lightning") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0593");
+      }
+      if (id(fc_weather).state == "lightning-rainy") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F067E");
+      }
+      if (id(fc_weather).state == "pouring") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0596");
+      }
+      if (id(fc_weather).state == "rainy") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0597");
+      }
+      if (id(fc_weather).state == "snowy") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0F36");
+      }
+      if (id(fc_weather).state == "snowy-rainy") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F067F");
+      }
+      if (id(fc_weather).state == "sunny") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0599");
+      }
+      if (id(fc_weather).state == "windy") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F059D");
+      }
+      if (id(fc_weather).state == "windy-variant") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F059E");
+      }
+      if (id(fc_weather).state == "exceptional") {
+        it.printf(weather_icon_x, weather_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0F38");
+      }
+
+      // Moon Phase Icon (middle of the screen, delete if unnecessary)
+      #define moon_icon_x 138
+      #define moon_icon_y size_font_date+2+size_font_time+2+size_font_date+2+size_font_icons_small+2+size_font_icons_small+2-12
+
+      if (id(moon).state == "new_moon") {
+        it.printf(moon_icon_x, moon_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0F64");
+      }
+      if (id(moon).state == "waxing_crescent") {
+        it.printf(moon_icon_x, moon_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0F67");
+      }
+      if (id(moon).state == "first_quarter") {
+        it.printf(moon_icon_x, moon_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0F61");
+      }
+      if (id(moon).state == "waxing_gibbous") {
+        it.printf(moon_icon_x, moon_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0F68");
+      }
+      if (id(moon).state == "full_moon") {
+        it.printf(moon_icon_x, moon_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0F62");
+      }
+      if (id(moon).state == "waning_gibbous") {
+        it.printf(moon_icon_x, moon_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0F66");
+      }
+      if (id(moon).state == "last_quarter") {
+        it.printf(moon_icon_x, moon_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0F63");
+      }
+      if (id(moon).state == "waning_crescent") {
+        it.printf(moon_icon_x, moon_icon_y, id(font_icons), TextAlign::TOP_CENTER, "\U000F0F65");
+      }
+      
+      // Moon Phase Info (left side of the screen, delete if unnecessary)
+      #define moon_info_x 0
+      #define moon_info_y size_font_date+2+size_font_time+2+size_font_date+size_font_value+2+size_font_icons_small+2+size_font_icons_small+2+size_font_icons_small+2-12
+
+      if (id(moon).state == "new_moon") {
+        it.printf(moon_info_x, moon_info_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F0F64");
+        it.printf(moon_info_x+20, moon_info_y, id(font_value), TextAlign::TOP_LEFT, " New Moon");
+      }
+      if (id(moon).state == "waxing_crescent") {
+        it.printf(moon_info_x, moon_info_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F0F67");
+        it.printf(moon_info_x+20, moon_info_y, id(font_value), TextAlign::TOP_LEFT, " Waxing Crescent");
+      }
+      if (id(moon).state == "first_quarter") {
+        it.printf(moon_info_x, moon_info_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F0F61");
+        it.printf(moon_info_x+20, moon_info_y, id(font_value), TextAlign::TOP_LEFT, " First Quarter");
+      }
+      if (id(moon).state == "waxing_gibbous") {
+        it.printf(moon_info_x, moon_info_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F0F68");
+        it.printf(moon_info_x+20, moon_info_y, id(font_value), TextAlign::TOP_LEFT, " Waxing Gibbous");
+      }
+      if (id(moon).state == "full_moon") {
+        it.printf(moon_info_x, moon_info_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F0F62");
+        it.printf(moon_info_x+20, moon_info_y, id(font_value), TextAlign::TOP_LEFT, " Full Moon");
+      }
+      if (id(moon).state == "waning_gibbous") {
+        it.printf(moon_info_x, moon_info_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F0F66");
+        it.printf(moon_info_x+20, moon_info_y, id(font_value), TextAlign::TOP_LEFT, " Waning Gibbous");
+      }
+      if (id(moon).state == "last_quarter") {
+        it.printf(moon_info_x, moon_info_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F0F63");
+        it.printf(moon_info_x+20, moon_info_y, id(font_value), TextAlign::TOP_LEFT, " Last Quarter");
+      }
+      if (id(moon).state == "waning_crescent") {
+        it.printf(moon_info_x, moon_info_y, id(font_icons_small), TextAlign::TOP_LEFT, "\U000F0F65");
+        it.printf(moon_info_x+20, moon_info_y, id(font_value), TextAlign::TOP_LEFT, " Waning Crescent");
+      }
